@@ -3,20 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package WiHELP;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
+import java.sql.*;
 
 /**
  *
  * @author Ikmal
  */
-public class register extends HttpServlet {
+public class appCounselor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,70 +30,52 @@ public class register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        PreparedStatement stmt = null;
-        PreparedStatement stmt2 = null;
-        String user = request.getParameter("userType");
-        String name = request.getParameter("name");
-        int age = Integer.valueOf(request.getParameter("age"));
-        String address = request.getParameter("address");
-        String email = request.getParameter("email");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String license = request.getParameter("license");
         
-        try (PrintWriter out = response.getWriter()) {
-
+        Statement stmt = null;
+        PreparedStatement stmt1 = null;
+        PreparedStatement stmt2 = null;
+        PreparedStatement stmt3 = null;
+        try{
+            PrintWriter out = response.getWriter();
             Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/wihelp?useSSL=false", "root", "1234");
            
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/wihelp?useSSL=false", "root", "1234");
             
-            if(user.equals("patient")){
+            stmt = conn.createStatement();
+            
+            String sql = "Select * from counselorpending where license = '"+request.getParameter("license")+"'";
+            //out.print(sql);
+            ResultSet rset = stmt.executeQuery(sql);
+            
+            while(rset.next()){
+                String sql1 = "INSERT into user values(?,?,?,?,?)";
+                stmt1 = conn.prepareStatement(sql1);
                 
-                String sql = "INSERT into user values(?,?,?,?,?)";
-                stmt = conn.prepareStatement(sql);
+                stmt1.setString(1, rset.getString("username"));
+                stmt1.setString(2, rset.getString("password"));
+                stmt1.setString(3, rset.getString("name"));
+                stmt1.setString(4, rset.getString("email"));
+                stmt1.setInt(5, rset.getInt("age"));
                 
-                stmt.setString(1, username);
-                stmt.setString(2, password);
-                stmt.setString(3, name);
-                stmt.setString(4,email);
-                stmt.setInt(5, age);
-                
-                stmt.executeUpdate();
-                
-                out.print("test");
-                String sql2 = "INSERT into patient values(?,?)";
+            stmt1.executeUpdate();
+            out.print("test");
+            String sql2 = "INSERT into counselor values(?,?)";
                 stmt2 = conn.prepareStatement(sql2);
-                
-                stmt2.setString(1, username);
-                stmt2.setString(2, address);
-                
-                
+            
+                stmt2.setString(1, rset.getString("username"));
+                stmt2.setString(2, rset.getString("license"));
                 
                 stmt2.executeUpdate();
-                out.print("test");
                 
+             String sql3 = "UPDATE counselorpending set status = ? where license = ?";
+                stmt3 = conn.prepareStatement(sql3);
                 
+                stmt3.setString(1, "Approved");
+                stmt3.setString(2, rset.getString("license"));
                 
-                
-                
-                
-
+                stmt3.executeUpdate();
             }
-            else if(user.equals("counselor")){
-                String sql = "INSERT into counselorpending values(?,?,?,?,?,?)";
-                stmt = conn.prepareStatement(sql);
-                
-                stmt.setString(1, username);
-                stmt.setString(2, password);
-                stmt.setString(3, name);
-                stmt.setInt(4, age);
-                stmt.setString(5, email);
-                stmt.setString(6, license);
-                
-                int row1 = stmt.executeUpdate();
-            }
-             out.print("test");
+            response.sendRedirect("approve");
         }
         catch(Exception e){
             e.printStackTrace();
