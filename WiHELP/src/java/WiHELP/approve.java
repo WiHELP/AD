@@ -48,7 +48,7 @@ public class approve extends HttpServlet {
             ResultSet rset = stmt.executeQuery(str1);
             
             String str2 = "select * from lkm";
-            ResultSet rset2 = stmt2.executeQuery(str2);
+            
             
             out.print("<head>"
                         + "<link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\n" +
@@ -70,6 +70,7 @@ public class approve extends HttpServlet {
                                         + "</tr>");
                             while(rset.next()){
                                 
+                                ResultSet rset2 = stmt2.executeQuery(str2);
                                 String name = rset.getString("name");
                                 String license = rset.getString("license");
                                 String status = rset.getString("status");
@@ -83,7 +84,7 @@ public class approve extends HttpServlet {
                                         + "<td>");
                                         boolean test = false;
                                         while(rset2.next()){
-                                            if(license.equals(rset2.getString("PA_No")))
+                                            if(license.equals(rset2.getString("KB_No")))
                                                 test = true;
                                         }
                                         if(test == true){
