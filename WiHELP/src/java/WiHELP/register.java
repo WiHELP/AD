@@ -93,7 +93,7 @@ public class register extends HttpServlet {
             
             if(stat == true){
                 
-                out.print("interface wihelp");
+                response.sendRedirect("Login.html");
             }
         }
         catch(Exception e){
