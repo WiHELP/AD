@@ -22,6 +22,26 @@
 <link rel="stylesheet" href="css/font-icon.css">
 <link rel="stylesheet" href="css/animate.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+<style>
+.flex-container {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  
+}
+
+.flex-container div {
+  background-color: #f1f1f1;
+  width: 300px;
+  height: 300px;
+  margin: 10px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+  margin-top: 15%;
+}
+</style>
 </head>
 
 <body>
@@ -39,7 +59,13 @@
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
   </header>
 
-    <body>
+  <div class="flex-container">
+  <div>1 <a href="/WiHELP/register.html" class="btn btn-large">GET STARTED</a> </div></div>
+  <a href="/WiHELP/register.html" class="btn btn-large">GET STARTED</a> </div>
+  <div>2</div>
+ 
+</div>
+
         
     </body>
 </html>
